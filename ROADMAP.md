@@ -8,6 +8,15 @@ issue, where the details and the discussion are. Released changes are in
 
 ✅ done · 🔄 being built · 📋 planned · 🔍 looking into it
 
+## Download leftovers (current development)
+
+- ✅ Options menu: inspect older untracked `.mdm.part` and `.mdm.json` files in known download
+  folders; exclude files still attached to the list, and show matching resume/part files together.
+  Each candidate is shown with its location and size and can be deleted individually on request.
+- ✅ Report errors when removing a task fails to delete its temporary or video intermediate files.
+- 📋 Broader detection for video-helper and torrent session data, and a separate opt-in cleanup
+  policy, require ownership checks before they can be offered safely.
+
 ## Version 0.5.0
 
 Everything below ships together, in version 0.5.0.

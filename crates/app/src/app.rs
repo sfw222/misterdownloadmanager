@@ -253,6 +253,7 @@ enum Cmd {
     Resume,
     StopAll,
     DeleteCompleted,
+    InspectLeftovers,
     /// Start / stop a queue (index into `App::queues`).
     StartQueue(usize),
     StopQueue(usize),
@@ -906,6 +907,7 @@ pub struct App {
     speed_settings: Option<dialogs::SpeedSettings>,
     scheduler: Option<crate::scheduler::Scheduler>,
     options: Option<crate::options::OptionsDialog>,
+    leftovers: Option<Vec<crate::residuals::Candidate>>,
     /// Downloads to finish off once stopped: Download File Info was cancelled after an early
     /// start (`None`: the download and its data go), or its file was given another place
     /// (`Some((dest, start))`: the data so far goes, it starts over there when `start`).
@@ -1632,6 +1634,7 @@ impl App {
             speed_settings: None,
             scheduler: None,
             options: None,
+            leftovers: None,
             category_dlg: None,
             category_for_file_info: false,
             grabber: None,
@@ -3539,12 +3542,28 @@ impl App {
                         ),
                     );
                 }
-                let _ = std::fs::remove_file(mdm_engine::naming::part_path(&i.dest));
-                let _ = std::fs::remove_file(state_path(&i.dest));
+                let mut failures = Vec::new();
+                for path in [mdm_engine::naming::part_path(&i.dest), state_path(&i.dest)] {
+                    if let Err(e) = std::fs::remove_file(&path)
+                        && e.kind() != std::io::ErrorKind::NotFound
+                    {
+                        failures.push(format!("{}: {e}", path.display()));
+                    }
+                }
                 // A video's streams and their parts, kept for Resume (an unfinished run, a
                 // failed merge): they go with it.
                 for f in video_leftovers(&self.items, id, false) {
-                    let _ = std::fs::remove_file(f);
+                    if let Err(e) = std::fs::remove_file(&f)
+                        && e.kind() != std::io::ErrorKind::NotFound
+                    {
+                        failures.push(format!("{}: {e}", f.display()));
+                    }
+                }
+                if !failures.is_empty() {
+                    dialogs::tell(
+                        crate::i18n::mark("Some temporary files could not be deleted"),
+                        failures.join("\n"),
+                    );
                 }
             }
             self.items.retain(|i| i.id != id);
@@ -6979,6 +6998,13 @@ impl App {
                     dialogs::raise(ctx, dialogs::dialog_viewport("options"));
                 }
             }
+            Cmd::InspectLeftovers => {
+                let mut dirs = vec![self.downloads.clone()];
+                dirs.extend(self.items.iter().filter_map(|i| i.dest.parent().map(|p| p.to_owned())));
+                dirs.extend(self.settings.folder_history.iter().map(|p| PathBuf::from(p.as_str())));
+                dirs.extend(self.settings.category_dirs.iter().map(|(_, p)| PathBuf::from(p.as_str())));
+                self.leftovers = Some(crate::residuals::scan(&dirs, &self.items));
+            }
             Cmd::Scheduler => {
                 if self.scheduler.is_none() {
                     self.scheduler = Some(crate::scheduler::Scheduler::new(
@@ -7541,6 +7567,7 @@ impl App {
                 ),
                 Sep,
                 I("&Options", Cmd::Options, true, false),
+                I("Inspect download &leftovers...", Cmd::InspectLeftovers, true, false),
             ],
             3 => vec![
                 I(
@@ -10057,6 +10084,67 @@ impl App {
 
     fn dialogs(&mut self, ctx: &egui::Context) {
         self.help_dialogs(ctx);
+        if let Some(mut candidates) = self.leftovers.take() {
+            let mut open = true;
+            let mut delete = None;
+            egui::Window::new(crate::i18n::t("Download leftovers"))
+                .open(&mut open)
+                .resizable(true)
+                .default_width(570.0)
+                .show(ctx, |ui| {
+                    ui.label(crate::i18n::t(
+                        "Only untracked MDM files older than seven days are shown. A matching resume file is listed together with its part. Deleting these files makes that download impossible to resume. Nothing is removed automatically.",
+                    ));
+                    ui.separator();
+                    if candidates.is_empty() {
+                        ui.label(crate::i18n::t(
+                            "No safe-to-review leftovers found in known download folders.",
+                        ));
+                    }
+                    egui::ScrollArea::vertical().max_height(350.0).show(ui, |ui| {
+                        for (idx, candidate) in candidates.iter().enumerate() {
+                            ui.horizontal(|ui| {
+                                ui.label(format!(
+                                    "{} ({} bytes{})", candidate.path.display(), candidate.total_bytes(),
+                                    if candidate.has_resume_data() {
+                                        crate::i18n::t(", includes resume data")
+                                    } else {
+                                        ""
+                                    }
+                                ));
+                                if ui.button(crate::i18n::t("Delete file")).clicked() {
+                                    delete = Some(idx);
+                                }
+                            });
+                        }
+                    });
+                });
+            if let Some(idx) = delete {
+                // Recheck the current download list too: a task may have been added since scan.
+                let c = &candidates[idx];
+                let owned = self.items.iter().any(|i| {
+                    mdm_engine::naming::part_path(&i.dest) == c.path
+                        || mdm_engine::state::state_path(&i.dest) == c.path
+                });
+                let result = if owned {
+                    Err(std::io::Error::other("the file belongs to a current download"))
+                } else {
+                    crate::residuals::remove(c)
+                };
+                match result {
+                    Ok(()) => {
+                        candidates.remove(idx);
+                    }
+                    Err(e) => dialogs::tell(
+                        crate::i18n::mark("The temporary file could not be deleted"),
+                        format!("{}: {e}", c.path.display()),
+                    ),
+                }
+            }
+            if open {
+                self.leftovers = Some(candidates);
+            }
+        }
         // The next question in turn; one about a download that has left the list meanwhile is
         // checked afresh instead (it may ask again, about another).
         while self.duplicate.is_none()

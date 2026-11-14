@@ -154,6 +154,8 @@
 #. text in rssdlg.rs
 #. RSS feeds window, Download rules: shown in the empty Save to box
 	(the Torrents category's folder)	(the Torrents category's folder)
+#. message or event log entry in the main window
+	, includes resume data	, includes resume data
 #. text in remote.rs
 #. remote control page (on a phone): button that picks a .torrent file on the phone
 	.torrent file	.torrent file
@@ -932,6 +934,8 @@
 	Delete archives after extracting	Delete archives after extracting
 #. window title in a dialog box
 	Delete category	Delete category
+#. message or event log entry in the main window
+	Delete file	Delete file
 #. message or event log entry in the main window; text in the Scheduler window
 	Delete queue	Delete queue
 #. text in a dialog box
@@ -1040,6 +1044,8 @@
 	Download Later	Download Later
 #. window title in a dialog box
 	Download later	Download later
+#. message or event log entry in the main window
+	Download leftovers	Download leftovers
 #. window title in a dialog box; text in the Options window; checkbox in the Options window; text in the Scheduler window
 #. the Scheduler's page (and checkbox) that caps how much is downloaded in a time
 	Download limits	Download limits
@@ -2334,6 +2340,8 @@
 	No peers yet. Few people may share this torrent, or a firewall, a VPN or the network may be blocking BitTorrent.	No peers yet. Few people may share this torrent, or a firewall, a VPN or the network may be blocking BitTorrent.
 #. text in the Options window
 	No proxy/socks	No proxy/socks
+#. message or event log entry in the main window
+	No safe-to-review leftovers found in known download folders.	No safe-to-review leftovers found in known download folders.
 #. text in the Options window
 #. Options → Accounts: no system keyring/keychain answered (none runs, e.g. a desktop without one), so the sign-ins stay in MDM's settings folder, which only the user's account may read
 	No system keyring answered, so sign-ins and passwords are kept in MDM's settings, which only you can read.	No system keyring answered, so sign-ins and passwords are kept in MDM's settings, which only you can read.
@@ -2494,6 +2502,8 @@
 #. in Download video, a list longer than MDM lists: only its first {n} videos are shown
 #. {n} = a number (keep the braces as they are)
 	Only the first {n} videos are listed.	Only the first {n} videos are listed.
+#. message or event log entry in the main window
+	Only untracked MDM files older than seven days are shown. A matching resume file is listed together with its part. Deleting these files makes that download impossible to resume. Nothing is removed automatically.	Only untracked MDM files older than seven days are shown. A matching resume file is listed together with its part. Deleting these files makes that download impossible to resume. Nothing is removed automatically.
 #. checkbox in a dialog box
 	Only while I'm using the computer	Only while I'm using the computer
 #. button in a dialog box; text in a dialog box; button in a download's Properties window; button in torrentfiles.rs
@@ -3163,6 +3173,8 @@
 	Some	Some
 #. text in a dialog box
 	Some of the torrent's files are already in this folder:	Some of the torrent's files are already in this folder:
+#. message or event log entry in the main window
+	Some temporary files could not be deleted	Some temporary files could not be deleted
 #. text in the Options window
 	Sound file	Sound file
 #. page title in the Options window
@@ -3633,6 +3645,8 @@
 #. text in the Options window
 #. Options → Connection → DNS: the operating system's own DNS (the default)
 	The system's DNS	The system's DNS
+#. message or event log entry in the main window
+	The temporary file could not be deleted	The temporary file could not be deleted
 #. text in whereis.rs
 #. the tooltip of where a download's server is: how the time shown is measured
 	The time is a round trip, measured as this download's own connections opened.	The time is a round trip, measured as this download's own connections opened.
@@ -5258,6 +5272,10 @@ menu	In use: Wayland	In use: Wayland
 #. menu command in the main window
 #. View → Window system: a greyed note; MDM's windows are X11's (through XWayland) now
 menu	In use: X11 (XWayland)	In use: X11 (XWayland)
+#. menu command in the main window
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+#. the trailing ... means it opens a window: keep it
+menu	Inspect download &leftovers...	Inspect download &leftovers...
 #. menu command in the main window
 #. View → Draw with: a greyed note under "… didn't start here"; why: another error, written in MDM's log
 menu	It couldn't start: the log says why	It couldn't start: the log says why
