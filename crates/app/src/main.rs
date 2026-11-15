@@ -50,6 +50,7 @@ mod quota;
 mod regional;
 mod remote;
 mod renderer;
+mod residuals;
 mod rss;
 mod rssdlg;
 mod scale;

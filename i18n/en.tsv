@@ -154,6 +154,8 @@
 #. text in rssdlg.rs
 #. RSS feeds window, Download rules: shown in the empty Save to box
 	(the Torrents category's folder)	(the Torrents category's folder)
+#. message or event log entry in the main window
+	, includes resume data	, includes resume data
 #. text in remote.rs
 #. remote control page (on a phone): button that picks a .torrent file on the phone
 	.torrent file	.torrent file
@@ -1040,6 +1042,8 @@
 	Download Later	Download Later
 #. window title in a dialog box
 	Download later	Download later
+#. message or event log entry in the main window
+	Download leftovers	Download leftovers
 #. window title in a dialog box; text in the Options window; checkbox in the Options window; text in the Scheduler window
 #. the Scheduler's page (and checkbox) that caps how much is downloaded in a time
 	Download limits	Download limits
@@ -2055,6 +2059,8 @@
 #. remote control page (on a phone): MDM can't be reached now; the page keeps trying by itself
 #. the trailing ... means it is still going on: keep it
 	MDM does not answer. Trying again...	MDM does not answer. Trying again...
+#. message or event log entry in the main window
+	MDM files older than seven days with no current download. Review before moving them to the Recycle Bin.	MDM files older than seven days with no current download. Review before moving them to the Recycle Bin.
 #. text in remote.rs
 #. remote control page (on a phone): no pairing code is shown in MDM; "Pair a device" is MDM's button
 	MDM shows no code now. Click Pair a device there first.	MDM shows no code now. Click Pair a device there first.
@@ -2177,6 +2183,8 @@
 	Move to folder	Move to folder
 #. message or event log entry in the main window
 	Move to queue	Move to queue
+#. message or event log entry in the main window
+	Move to Recycle Bin	Move to Recycle Bin
 #. text in the Scheduler window
 	Move up	Move up
 #. what a keyboard shortcut does in the Help menu's windows (About, updates, shortcuts, Tell a friend)
@@ -2334,6 +2342,8 @@
 	No peers yet. Few people may share this torrent, or a firewall, a VPN or the network may be blocking BitTorrent.	No peers yet. Few people may share this torrent, or a firewall, a VPN or the network may be blocking BitTorrent.
 #. text in the Options window
 	No proxy/socks	No proxy/socks
+#. message or event log entry in the main window
+	No safe-to-review leftovers found in known download folders.	No safe-to-review leftovers found in known download folders.
 #. text in the Options window
 #. Options → Accounts: no system keyring/keychain answered (none runs, e.g. a desktop without one), so the sign-ins stay in MDM's settings folder, which only the user's account may read
 	No system keyring answered, so sign-ins and passwords are kept in MDM's settings, which only you can read.	No system keyring answered, so sign-ins and passwords are kept in MDM's settings, which only you can read.
@@ -2919,6 +2929,9 @@
 #. label over the folder the downloads were saved in
 #. label before the folder the torrent is saved in
 	Saved in	Saved in
+#. message or event log entry in the main window
+#. the trailing ... means it is still going on: keep it
+	Scanning download folders...	Scanning download folders...
 #. tab in the Scheduler window
 #. noun: tab title; when the queue starts and stops
 	Schedule	Schedule
@@ -3161,8 +3174,12 @@
 #. text in a download's progress window
 #. legend: pieces partly downloaded
 	Some	Some
+#. text in residuals.rs
+	some files could not be moved to the Recycle Bin	some files could not be moved to the Recycle Bin
 #. text in a dialog box
 	Some of the torrent's files are already in this folder:	Some of the torrent's files are already in this folder:
+#. message or event log entry in the main window
+	Some temporary files could not be deleted	Some temporary files could not be deleted
 #. text in the Options window
 	Sound file	Sound file
 #. page title in the Options window
@@ -3451,6 +3468,8 @@
 	The DHT reached no one. A firewall, a VPN or the network may be blocking UDP, which the DHT and most trackers use.	The DHT reached no one. A firewall, a VPN or the network may be blocking UDP, which the DHT and most trackers use.
 #. text in errors.rs
 	the disk is full	the disk is full
+#. text in residuals.rs
+	the download folder changed or is a link	the download folder changed or is a link
 #. text in errors.rs
 #. a helper (yt-dlp, ffmpeg) couldn't be downloaded: the connection to its server ({host}) closed before all of it came
 #. {host} = a server name such as "example.com" (keep the braces as they are)
@@ -3482,8 +3501,12 @@
 	The entries left out are still in {folder}	The entries left out are still in {folder}
 #. text in extension.rs
 	The extension is already in this app. Apple hasn't notarized this build, so Safari needs these steps to allow it.	The extension is already in this app. Apple hasn't notarized this build, so Safari needs these steps to allow it.
+#. text in residuals.rs
+	the file belongs to a current download	the file belongs to a current download
 #. text in errors.rs
 	the file changed on the server	the file changed on the server
+#. text in residuals.rs
+	the file changed since the scan	the file changed since the scan
 #. message or event log entry in the main window
 	The file could not be moved	The file could not be moved
 #. message or event log entry in the main window
@@ -3495,6 +3518,10 @@
 #. text in the Checksum window
 #. {algorithm} = a checksum algorithm such as "SHA-256" (keep the braces as they are)
 	The file does NOT match ({algorithm})	The file does NOT match ({algorithm})
+#. text in residuals.rs
+	the file has a matching download part	the file has a matching download part
+#. text in win32.rs
+	The file is in use by another program. Close it and try again.	The file is in use by another program. Close it and try again.
 #. text in the Checksum window
 #. {algorithm} = a checksum algorithm such as "SHA-256" (keep the braces as they are)
 	The file matches ({algorithm})	The file matches ({algorithm})
@@ -3525,6 +3552,8 @@
 #. text in extension.rs
 #. a check of Test browser integration: the browsers are set up, but the small helper program they start (misterdownloadmanager-nmhost) is gone
 	The helper program the browsers start is missing	The helper program the browsers start is missing
+#. message or event log entry in the main window
+	The leftover scan could not be completed.	The leftover scan could not be completed.
 #. message or event log entry in the main window; text in the Options window
 #. {error} = an error message (keep the braces as they are)
 	The list could not be saved: {error}	The list could not be saved: {error}
@@ -3541,6 +3570,12 @@
 	the password is wrong	the password is wrong
 #. text in errors.rs
 	the path is too long for Windows: {path}	the path is too long for Windows: {path}
+#. text in win32.rs
+	The Recycle Bin could not access the file. Check its permissions.	The Recycle Bin could not access the file. Check its permissions.
+#. text in win32.rs
+	The Recycle Bin operation failed or was cancelled; remaining files were kept	The Recycle Bin operation failed or was cancelled; remaining files were kept
+#. text in win32.rs
+	The Recycle Bin worker stopped unexpectedly	The Recycle Bin worker stopped unexpectedly
 #. text in the Help menu's windows (About, updates, shortcuts, Tell a friend)
 #. why updates could not be checked: the newest release on the site has no number
 	the release has no version	the release has no version
@@ -3557,6 +3592,8 @@
 	The report is on your clipboard.	The report is on your clipboard.
 #. text in crashui.rs
 	The report is on your clipboard: paste it in a comment on the issue.	The report is on your clipboard: paste it in a comment on the issue.
+#. text in residuals.rs
+	the resume state changed since scanning	the resume state changed since scanning
 #. text in errors.rs
 #. an FTPS (or other TLS) connection could not be secured
 	the secure connection failed	the secure connection failed
@@ -3633,6 +3670,8 @@
 #. text in the Options window
 #. Options → Connection → DNS: the operating system's own DNS (the default)
 	The system's DNS	The system's DNS
+#. message or event log entry in the main window
+	The temporary file could not be moved to the Recycle Bin	The temporary file could not be moved to the Recycle Bin
 #. text in whereis.rs
 #. the tooltip of where a download's server is: how the time shown is measured
 	The time is a round trip, measured as this download's own connections opened.	The time is a round trip, measured as this download's own connections opened.
@@ -3855,6 +3894,8 @@
 	Trackers to add to {name}, one address a line:	Trackers to add to {name}, one address a line:
 #. text in a download's progress window
 	Transfer rate	Transfer rate
+#. text in residuals.rs
+	Trash is unavailable; the remaining files were kept	Trash is unavailable; the remaining files were kept
 #. text in countries.rs
 #. a country's name (where a download's server is)
 	Trinidad and Tobago	Trinidad and Tobago
@@ -4999,6 +5040,10 @@ menu	&Exit	&Exit
 #. verb: load downloads from a file
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation
 menu	&Import	&Import
+#. menu command in the main window
+#. & marks the keyboard shortcut letter: keep one & before a letter of the translation
+#. the trailing ... means it opens a window: keep it
+menu	&Inspect download leftovers...	&Inspect download leftovers...
 #. menu command in the main window
 #. View menu: submenu choosing how large MDM draws its windows and text (100 % to 200 %), as a browser's zoom
 #. & marks the keyboard shortcut letter: keep one & before a letter of the translation

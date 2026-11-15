@@ -7406,3 +7406,86 @@ impl Drop for GlobalHotKeyOs {
         }
     }
 }
+
+/// Recycle inspected files, stopping on the first failure. RECYCLEONDELETE forbids
+/// silently converting an unavailable Recycle Bin into a permanent deletion.
+pub fn recycle_leftovers(files: &[std::path::PathBuf]) -> Result<(), String> {
+    fn shell_error(error: windows::core::Error) -> String {
+        use windows::Win32::Foundation::{ERROR_ACCESS_DENIED, ERROR_SHARING_VIOLATION};
+        use windows::Win32::UI::Shell::{
+            COPYENGINE_E_ACCESS_DENIED_DEST, COPYENGINE_E_ACCESS_DENIED_SRC,
+            COPYENGINE_E_SHARING_VIOLATION_DEST, COPYENGINE_E_SHARING_VIOLATION_SRC,
+        };
+        let code = error.code();
+        if code == COPYENGINE_E_SHARING_VIOLATION_SRC
+            || code == COPYENGINE_E_SHARING_VIOLATION_DEST
+            || code == windows::core::HRESULT::from_win32(ERROR_SHARING_VIOLATION.0)
+        {
+            crate::i18n::t("The file is in use by another program. Close it and try again.")
+                .to_owned()
+        } else if code == COPYENGINE_E_ACCESS_DENIED_SRC
+            || code == COPYENGINE_E_ACCESS_DENIED_DEST
+            || code == windows::core::HRESULT::from_win32(ERROR_ACCESS_DENIED.0)
+        {
+            crate::i18n::t("The Recycle Bin could not access the file. Check its permissions.")
+                .to_owned()
+        } else {
+            error.to_string()
+        }
+    }
+    let files = files.to_vec();
+    std::thread::spawn(move || {
+        use windows::Win32::System::Com::{
+            CLSCTX_INPROC_SERVER, COINIT_APARTMENTTHREADED, CoCreateInstance, CoInitializeEx,
+            CoUninitialize,
+        };
+        use windows::Win32::UI::Shell::{
+            FOF_NOCONFIRMATION, FOF_NOERRORUI, FOF_SILENT, FOFX_EARLYFAILURE, FOFX_RECYCLEONDELETE,
+            FileOperation, IFileOperation, IFileOperationProgressSink, IShellItem,
+            SHCreateItemFromParsingName,
+        };
+        use windows::core::HSTRING;
+        struct Apartment;
+        impl Drop for Apartment {
+            fn drop(&mut self) {
+                unsafe { CoUninitialize() };
+            }
+        }
+        // SAFETY: this dedicated thread initializes and balances its own COM apartment;
+        // shell items and operations never escape it. All paths are copied into HSTRINGs.
+        unsafe {
+            CoInitializeEx(None, COINIT_APARTMENTTHREADED)
+                .ok()
+                .map_err(shell_error)?;
+            let _apartment = Apartment;
+            let op: IFileOperation = CoCreateInstance(&FileOperation, None, CLSCTX_INPROC_SERVER)
+                .map_err(shell_error)?;
+            op.SetOperationFlags(
+                FOFX_RECYCLEONDELETE
+                    | FOFX_EARLYFAILURE
+                    | FOF_NOCONFIRMATION
+                    | FOF_NOERRORUI
+                    | FOF_SILENT,
+            )
+            .map_err(shell_error)?;
+            for file in &files {
+                let absolute = std::path::absolute(file).map_err(|e| e.to_string())?;
+                let item: IShellItem =
+                    SHCreateItemFromParsingName(&HSTRING::from(absolute.as_os_str()), None)
+                        .map_err(|e| format!("{}: {}", file.display(), shell_error(e)))?;
+                op.DeleteItem(&item, None::<&IFileOperationProgressSink>)
+                    .map_err(shell_error)?;
+            }
+            op.PerformOperations().map_err(shell_error)?;
+            if op.GetAnyOperationsAborted().map_err(shell_error)?.as_bool() {
+                return Err(crate::i18n::t(
+                    "The Recycle Bin operation failed or was cancelled; remaining files were kept",
+                )
+                .to_owned());
+            }
+            Ok(())
+        }
+    })
+    .join()
+    .map_err(|_| crate::i18n::t("The Recycle Bin worker stopped unexpectedly").to_owned())?
+}
