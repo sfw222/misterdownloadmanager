@@ -7261,3 +7261,66 @@ unit	{n} MB	{n} MB
 #. {n} = a number (keep the braces as they are)
 #, machine
 unit	{n} MB/sec	{n} MB/秒
+#. Download leftover inspection
+#, machine
+menu	&Inspect download leftovers...	檢查下載殘留檔案(&I)...
+#. Download leftover inspection
+#, machine
+	Download leftovers	下載殘留檔案
+#. Download leftover inspection
+#, machine
+	, includes resume data	，含續傳資料
+#. Download leftover inspection
+#, machine
+	No safe-to-review leftovers found in known download folders.	已知下載目錄中未發現可供檢查的殘留檔案。
+#. Download leftover inspection
+#, machine
+	Some temporary files could not be deleted	部分暫存檔案未能刪除
+#. Download leftover inspection
+#, machine
+	The temporary file could not be moved to the Recycle Bin	無法將暫存檔案移入資源回收筒
+#. Download leftover inspection
+#, machine
+	MDM files older than seven days with no current download. Review before moving them to the Recycle Bin.	以下 MDM 檔案已超過七天且不屬於目前的工作。請核對後再移入資源回收筒。
+#. Download leftover inspection
+#, machine
+	Scanning download folders...	正在掃描下載目錄...
+#. Download leftover inspection
+#, machine
+	The leftover scan could not be completed.	殘留檔案掃描未能完成。
+#. Download leftover inspection
+#, machine
+	Move to Recycle Bin	移入資源回收筒
+#. Download leftover inspection error
+#, machine
+	the file changed since the scan	檔案在掃描後發生了變化
+#. Download leftover inspection error
+#, machine
+	the download folder changed or is a link	下載目錄發生了變化或是連結
+#. Download leftover inspection error
+#, machine
+	the resume state changed since scanning	續傳記錄在掃描後發生了變化
+#. Download leftover inspection error
+#, machine
+	the file has a matching download part	該檔案有對應的下載分片
+#. Download leftover inspection error
+#, machine
+	the file belongs to a current download	該檔案屬於目前的下載工作
+#. Download leftover inspection error
+#, machine
+	some files could not be moved to the Recycle Bin	部分檔案未能移入資源回收筒
+#. Download leftover inspection error
+#, machine
+	Trash is unavailable; the remaining files were kept	資源回收筒無法使用；其餘檔案已保留
+#. Download leftover inspection error
+#, machine
+	The Recycle Bin operation failed or was cancelled; remaining files were kept	回收操作失敗或已取消；其餘檔案已保留
+#. Download leftover inspection error
+#, machine
+	The Recycle Bin worker stopped unexpectedly	回收操作意外停止
+#. Download leftover recycling failure
+#, machine
+	The file is in use by another program. Close it and try again.	檔案正被其他程式使用，請關閉後重試。
+#. Download leftover recycling failure
+#, machine
+	The Recycle Bin could not access the file. Check its permissions.	資源回收筒無法存取該檔案，請檢查檔案權限。

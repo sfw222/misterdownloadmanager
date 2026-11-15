@@ -87,7 +87,7 @@ raw-window-handle = "0.6"
 # Latin, Greek and Cyrillic text drawn by DirectWrite as Windows' classic controls draw it
 # (win32.rs `text_rasterizer`): its COM interfaces, which windows-sys doesn't have. The windows
 # 0.62 wgpu-hal already builds.
-windows = { version = "0.62", default-features = false, features = ["Win32_Graphics_DirectWrite"] }
+windows = { version = "0.62", default-features = false, features = ["Win32_Graphics_DirectWrite", "Win32_System_Com", "Win32_UI_Shell"] }
 
 # The notification-area icon and its menu (tray.rs).
 [target.'cfg(not(target_os = "linux"))'.dependencies]
